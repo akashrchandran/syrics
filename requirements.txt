@@ -1,0 +1,2 @@
+requests==2.25.1
+spotipy==2.19.0

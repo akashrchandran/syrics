@@ -1,4 +1,11 @@
 {
-	"download_path": "",
-	"synced_lyrics": true
-}	
+    "sp_dc": "",
+    "client_id": "",
+    "client_secret": "",
+    "download_path": "",
+    "create_folder": true,
+    "folder_name": "{album} - {artist}",
+    "file_name": "{track_number}",
+    "synced_lyrics": true,
+    "force_synced": true
+}
