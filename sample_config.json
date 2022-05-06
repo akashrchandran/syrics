@@ -1,8 +1,8 @@
 {
     "sp_dc": "",
-    "client_id": "",
-    "client_secret": "",
-    "download_path": "",
+    "client_id": "3eddf8157ce94c75a412a4cd84507bbb",
+    "client_secret": "f1c5e360699b444d867524c4ecaedbeb",
+    "download_path": "downloads",
     "create_folder": true,
     "folder_name": "{album} - {artist}",
     "file_name": "{track_number}",
