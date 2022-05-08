@@ -1,5 +1,5 @@
 import os
-from xxlimited import Str
+from tqdm import tqdm
 from api import Spotify
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -21,12 +21,20 @@ print("Logging in....")
 client = Spotify(config['sp_dc'])
 
 def get_album_tracks(album_id: str):
-	album_data = sp.album_tracks(album_id)['items']
-	return [tracks['id'] for tracks in album_data]
+	album_data = sp.album(album_id)
+	print(f"> Album: {album_data['name']}")
+	print(f"> Artist: {album_data['artists'][0]['name']}")
+	print(f"> Songs: {album_data['total_tracks']} Tracks")
+	print("\n")
+	return [tracks['id'] for tracks in album_data['tracks']['items']]
 
 def get_playlist_tracks(playlist_id: str):
-	play_data = sp.playlist_tracks(playlist_id)['items']
-	return [tracks['track']['id'] for tracks in play_data]
+	play_data = sp.playlist(playlist_id)
+	print(f"> Playlist: {play_data['name']}")
+	print(f"> Owner: {play_data['owner']['display_name']}")
+	print(f"> Songs: {play_data['tracks']['total']} Tracks")
+	print("\n")
+	return [tracks['track']['id'] for tracks in play_data['tracks']['items']]
 
 def format_lrc(lyrics_json):
 	lyrics = lyrics_json['lyrics']['lines']
@@ -54,7 +62,7 @@ def sanitize_track_data(track_data: dict):
 
 def save_lyrics(lyrics, track_data):
 	file_name = f"{rename_using_format(config['file_name'], track_data)}.lrc"
-	with open(f"{config['download_path']}/{file_name}", "w+") as f:
+	with open(f"{config['download_path']}/{file_name}", "w+", encoding='utf-8') as f:
 		f.write(lyrics)
 
 def rename_using_format(string: str, data: dict):
@@ -68,15 +76,15 @@ def download_lyrics(track_ids: list):
 	tracks_data = sp.tracks(track_ids)['tracks']
 	if config['download_path'] and not os.path.exists(config['download_path']):
 		os.mkdir(config['download_path'])
-	for track in tracks_data:
+	unable = []
+	for track in tqdm(tracks_data):
 		sanitize_track_data(track)
-		print(f'Fetching lyrics for: {track["name"]}')
 		lyrics_json = client.get_lyrics(track['id'])
 		if not lyrics_json:
-			print("No Lyrics Found!. Skipping....")
+			unable.append(track)
+			continue
 		save_lyrics(format_lrc(lyrics_json), track)
-		print("Done!")
-		print("\n")
+	
 
 def main():
 	account = client.get_me()
@@ -94,7 +102,6 @@ def main():
 	else:
 		print("Enter valid url!")
 		exit(0)
-	print('\n')
 	download_lyrics(track_ids)
 
 
