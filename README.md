@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2022 akash
+ Copyright (C) 2022 Akash R Chandran
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
@@ -14,3 +14,24 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+
+<h1 align="center">
+Syrics
+</h1>
+
+<div align="center">
+
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+ 
+</div>
+ 
+ <div align="center">
+
+A command line tool to fetch lyrics from spotify and save it to file. It can fetch both synced and unsynced lyrics from spotify. 
+ 
+</div>
+ 
+ 
+## Getting started
+
+> You will need a **spotify account**, free also works
