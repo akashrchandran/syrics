@@ -35,3 +35,13 @@ A command line tool to fetch lyrics from spotify and save it to file. It can fet
 ## Getting started
 
 > You will need a **spotify account**, free also works
+
+### Install with git clone
+
+```
+git clone https://github.com/akashrchandran/syrics
+cd syrics
+pip install -r requirements.txt
+```
+
+> This script uses Spotify web player to find get lyrics, so it requires something known as sp_dc
