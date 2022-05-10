@@ -6,6 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import json
 from exceptions import ConfigNotFound
 import re
+from cli import parser
 
 try:
 	with open("config.json") as f:
@@ -13,11 +14,25 @@ try:
 except Exception as e:
 	raise ConfigNotFound("Config file seems to be missing.") from e
 
+args = parser.parse_args()
+product = args
+
+logo = '''
+     _______.____    ____ .______       __    ______     _______.
+    /       |\   \  /   / |   _  \     |  |  /      |   /       |
+   |   (----` \   \/   /  |  |_)  |    |  | |  ,----'  |   (----`
+    \   \      \_    _/   |      /     |  | |  |        \   \    
+.----)   |       |  |     |  |\  \----.|  | |  `----.----)   |   
+|_______/        |__|     | _| `._____||__|  \______|_______/    
+                                                                 
+
+'''
+
 auth_manager = SpotifyClientCredentials(client_id = config['client_id'], client_secret = config['client_secret'])
 sp = spotipy.Spotify(auth_manager = auth_manager)
 
 print("Logging in....")
-
+os.system('cls' if os.name == 'nt' else 'clear')
 client = Spotify(config['sp_dc'])
 
 def get_album_tracks(album_id: str):
@@ -87,12 +102,15 @@ def download_lyrics(track_ids: list):
 	
 
 def main():
+	print(logo)
+	print('\n')
 	account = client.get_me()
 	print("Successfully Logged In as:")
 	print("Name: " + account["display_name"])
 	print("Country: " + account["country"])
 	print('\n')
-	link = input("Enter Link: ")
+	link = args.URL or input("Enter Link: ")
+	print(link)
 	if 'album' in link:
 		track_ids = get_album_tracks(link)
 	elif 'playlist' in link:
