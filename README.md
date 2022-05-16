@@ -43,5 +43,41 @@ git clone https://github.com/akashrchandran/syrics
 cd syrics
 pip install -r requirements.txt
 ```
+### Change sample_config.json to config.json
+*On Linux or Mac*
+```
+mv sample_config.json config.json
+```
+*On Windows*
+```
+ren sample_config.json config.json
+```
 
-> This script uses Spotify web player to find get lyrics, so it requires something known as sp_dc
+### Finding sp_dc
+> Syrics sp_dc cookie to authenticate against Spotify in order to have access to the required services.
+
+To obtain the cookies, these different methods can be used:
+
+#### 1. Use cookies extension
+
+_Using any extensions like [editthiscookie](https://www.editthiscookie.com/) can easily help you find it_
+
+#### 2. Chromium based browser
+1. Make sure you are connected on https://open.spotify.com
+2. Open the url chrome://settings/cookies/detail?site=spotify.com or edge://settings/cookies/detail?site=spotify.com based on your browser.
+3. Copy the content from sp_dc cookies
+
+#### 3. Developer Tools
+_Chrome based_
+1. Make sure https://open.spotify.com is opened and you are connected
+2. Press Command+Option+I (Mac) or Control+Shift+I or F12. This should open the developer tools menu of your browser.
+3. Go into the application section
+4. In the menu on the left go int Storage/Cookies/open.spotify.com
+5. Find the sp_dc and copy the value
+
+_Firefox_
+1. Make sure https://open.spotify.com is opened and you are connected
+2. Press Command+Option+I (Mac) or Control+Shift+I or F12. This should open the developer tools menu of your browser.
+3. Go into the Storage section. (You might have to click on the right arrows to reveal the section)
+4. Select the Cookies sub-menu and then https://open.spotify.com
+6. Find the sp_dc and sp_key and copy the values
