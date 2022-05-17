@@ -35,3 +35,56 @@ A command line tool to fetch lyrics from spotify and save it to file. It can fet
 ## Getting started
 
 > You will need a **spotify account**, free also works
+
+### Install with git clone
+
+```
+git clone https://github.com/akashrchandran/syrics
+cd syrics
+pip install -r requirements.txt
+```
+### Change sample_config.json to config.json
+*On Linux or Mac*
+```
+mv sample_config.json config.json
+```
+*On Windows*
+```
+ren sample_config.json config.json
+```
+
+### Finding sp_dc
+> Syrics sp_dc cookie to authenticate against Spotify in order to have access to the required services.
+
+To obtain the cookies, these different methods can be used:
+
+**Do make sure are logged in on [Spotify](https://open.spotify.com) and then use any method below**
+#### 1. Using cookies editor extension
+
+_Using any extensions like [Cookie-Editor](https://cookie-editor.cgagnier.ca/#download) can easily help you find it_
+
+![Cookie-Editor](https://i.ibb.co/zJ1KDGP/Screenshot-from-2022-05-17-23-26-33.png)
+
+#### 2. Chromium based browser
+1. Make sure you are connected on https://open.spotify.com
+2. Open the url chrome://settings/cookies/detail?site=spotify.com or edge://settings/cookies/detail?site=spotify.com based on your browser.
+3. Copy the content from sp_dc cookies
+
+![Chrome_Based_Browser](https://i.ibb.co/DYrCQV0/Screenshot-from-2022-05-18-00-02-56.png)
+
+#### 3. Developer Tools
+_Chrome based_
+1. Make sure https://open.spotify.com is opened and you are connected
+2. Press Command+Option+I (Mac) or Control+Shift+I or F12. This should open the developer tools menu of your browser.
+3. Go into the application section
+4. In the menu on the left go to Storage/Cookies/open.spotify.com
+5. Find the sp_dc (use the filter tab to search for it) and copy the value
+
+![Using_Developer_Tools](https://i.ibb.co/RvwN206/Screenshot-from-2022-05-11-01-11-54.png)
+
+_Firefox_
+1. Make sure https://open.spotify.com is opened and you are connected
+2. Press Command+Option+I (Mac) or Control+Shift+I or F12. This should open the developer tools menu of your browser.
+3. Go into the Storage section. (You might have to click on the right arrows to reveal the section)
+4. Select the Cookies sub-menu and then https://open.spotify.com
+6. Find the sp_dc and copy the value
