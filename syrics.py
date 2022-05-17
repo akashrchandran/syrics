@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import json
 from exceptions import ConfigNotFound
 import re
-from cli import parser
+from cli import parse_cmd
 
 try:
     with open("config.json") as f:
@@ -14,8 +14,7 @@ try:
 except Exception as e:
     raise ConfigNotFound("Config file seems to be missing.") from e
 
-args = parser.parse_args()
-product = args
+cmd_url = parse_cmd(config)
 
 logo = '''
      _______.____    ____ .______       __    ______     _______.
@@ -111,7 +110,6 @@ def download_lyrics(track_ids: list):
             continue
         save_lyrics(format_lrc(lyrics_json), track)
 
-
 def main():
     print(logo)
     print('\n')
@@ -120,8 +118,7 @@ def main():
     print("Name: " + account["display_name"])
     print("Country: " + account["country"])
     print('\n')
-    link = args.URL or input("Enter Link: ")
-    print(link)
+    link = cmd_url or input("Enter Link: ")
     if 'album' in link:
         track_ids = get_album_tracks(link)
     elif 'playlist' in link:

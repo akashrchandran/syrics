@@ -13,3 +13,9 @@ parser.add_argument("URL",
                     nargs="?",
                     help=("URL to get lyrics from spotify"),
                     )
+
+def parse_cmd(config: dict):
+    args = parser.parse_args()
+    if args.directory:
+        config['download_path'] = args.directory
+    return args.URL
