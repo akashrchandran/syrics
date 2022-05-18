@@ -88,3 +88,16 @@ _Firefox_
 3. Go into the Storage section. (You might have to click on the right arrows to reveal the section)
 4. Select the Cookies sub-menu and then https://open.spotify.com
 6. Find the sp_dc and copy the value
+
+#### 4. For Android phone users
+> Download [Kiwi browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser)
+1. Make sure https://open.spotify.com is opened and you are connected
+2. copy this url and open it in kiwi kiwi://settings/cookies/detail?site=spotify.com
+3. Find sp_dc and copy it
+
+![Kiwi_android](https://i.ibb.co/FzGrvf3/IMG-20220518-082740.jpg)
+
+### Config File
+
+> You may have noticed a config.json in the code directory.
+> After finding sp_dc you should edit config file and set sp_dc to the value you found.
