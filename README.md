@@ -27,7 +27,7 @@ Syrics
  
  <div align="center">
 
-A command line tool to fetch lyrics from spotify and save it to file. It can fetch both synced and unsynced lyrics from spotify. 
+A command line tool to fetch lyrics from spotify and save it to lrc file. It can fetch both synced and unsynced lyrics from spotify. 
  
 </div>
  
@@ -88,3 +88,56 @@ _Firefox_
 3. Go into the Storage section. (You might have to click on the right arrows to reveal the section)
 4. Select the Cookies sub-menu and then https://open.spotify.com
 6. Find the sp_dc and copy the value
+
+#### 4. For Android phone users
+> Download [Kiwi browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser)
+1. Make sure https://open.spotify.com is opened and you are connected
+2. copy this url and open it in kiwi kiwi://settings/cookies/detail?site=spotify.com
+3. Find sp_dc and copy it
+
+![Kiwi_android](https://i.ibb.co/FzGrvf3/IMG-20220518-082740.jpg)
+
+### Config File
+
+> You may have noticed a config.json in the code directory.
+> After finding sp_dc you should edit config file and set sp_dc to the value you found.
+
+```JSON
+{
+    "sp_dc": "",
+    "client_id": "",
+    "client_secret": "",
+    "download_path": "downloads",
+    "create_folder": true,
+    "folder_name": "{album} - {artist}",
+    "file_name": "{track_number}",
+    "synced_lyrics": true,
+    "force_synced": true
+}
+```
+See wiki for more details about the tags. (Still in development)
+
+### Usage
+> Make sure you have set the congig before starting
+
+#### 1. Direct
+```
+python3 syrics.py
+Enter link: https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+```
+ __It will ask for the link__
+
+#### 2. Passing link as commandline argument
+```
+python3 syrics.py https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+```
+_More arguments are availble check using_
+
+```
+python3 syrics.py -h
+```
+#### 3. Passing Folder path with music files (Experimental)
+
+```
+pythpn3 syrics.py /home/public_user/Music/songs
+```

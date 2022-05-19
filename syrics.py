@@ -1,12 +1,15 @@
+import json
 import os
-from tqdm import tqdm
-from api import Spotify
+import re
+
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import json
-from exceptions import ConfigNotFound
-import re
+from tqdm import tqdm
+
+from api import Spotify
 from cli import parse_cmd
+from exceptions import ConfigNotFound
+from tinytag import TinyTag
 
 try:
     with open("config.json") as f:
@@ -83,9 +86,8 @@ def sanitize_track_data(track_data: dict):
     track_data['artist'] = ','.join([artist['name'] for artist in artist_data])
 
 
-def save_lyrics(lyrics, track_data):
-    file_name = f"{rename_using_format(config['file_name'], track_data)}.lrc"
-    with open(f"{config['download_path']}/{file_name}", "w+", encoding='utf-8') as f:
+def save_lyrics(lyrics, path):
+    with open(path, "w+", encoding='utf-8') as f:
         f.write(lyrics)
 
 
@@ -108,8 +110,18 @@ def download_lyrics(track_ids: list):
         if not lyrics_json:
             unable.append(track)
             continue
-        save_lyrics(format_lrc(lyrics_json), track)
+        file_name = f"{config['download_path']}/{rename_using_format(config['file_name'], track)}.lrc"
+        save_lyrics(format_lrc(lyrics_json), path=file_name)
 
+def fetch_files(path: str):
+    files = [tracks for tracks in os.listdir(path) if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", tracks)]
+    for files in tqdm(files):
+            tag = TinyTag.get(os.path.join(path, files))
+            query = sp.search(q=f"track:{tag.title} album:{tag.album}", type="track", limit=1)
+            if track := query['tracks']['items']:
+                file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
+                lyrics_json = client.get_lyrics(track[0]['id'])
+                save_lyrics(format_lrc(lyrics_json), path=file_name)
 def main():
     print(logo)
     print('\n')
@@ -119,16 +131,19 @@ def main():
     print("Country: " + account["country"])
     print('\n')
     link = cmd_url or input("Enter Link: ")
-    if 'album' in link:
-        track_ids = get_album_tracks(link)
-    elif 'playlist' in link:
-        track_ids = get_playlist_tracks(link)
-    elif 'track' in link:
-        track_ids = [link]
+    if 'spotify' in link:
+        if 'album' in link:
+            track_ids = get_album_tracks(link)
+        elif 'playlist' in link:
+            track_ids = get_playlist_tracks(link)
+        elif 'track' in link:
+            track_ids = [link]
+        else:
+            print("Enter valid url!")
+            exit(0)
+        download_lyrics(track_ids)
     else:
-        print("Enter valid url!")
-        exit(0)
-    download_lyrics(track_ids)
+        fetch_files(link)
 
 
 if __name__ == "__main__":
