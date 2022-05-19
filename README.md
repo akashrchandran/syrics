@@ -115,19 +115,29 @@ _Firefox_
     "force_synced": true
 }
 ```
-See wiki for more details about the tags.
+See wiki for more details about the tags. (Still in development)
 
 ### Usage
 > Make sure you have set the congig before starting
 
-1. Direct
+#### 1. Direct
 ```
 python3 syrics.py
 Enter link: https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
 ```
-__It will ask for the link__
+ __It will ask for the link__
 
-2. Command line
+#### 2. Passing link as commandline argument
 ```
 python3 syrics.py https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+```
+_More arguments are availble check using_
+
+```
+python3 syrics.py -h
+```
+#### 3. Passing Folder path with music files (Experimental)
+
+```
+pythpn3 syrics.py /home/public_user/Music/songs
 ```
