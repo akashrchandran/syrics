@@ -114,14 +114,11 @@ def download_lyrics(track_ids: list):
         save_lyrics(format_lrc(lyrics_json), path=file_name)
 
 def fetch_files(path: str):
-    for files in os.listdir(path):
-        if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", files):
-            tag = TinyTag.get(os.path.join(path, files))
+    files = [tracks for tracks in os.listdir(path) if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", tracks)]
+    for files in tqdm(files):
             tag = TinyTag.get(os.path.join(path, files))
             query = sp.search(q=f"track:{tag.title} album:{tag.album}", type="track", limit=1)
             if track := query['tracks']['items']:
-                print(tag.title)
-                print(tag.album)
                 file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
                 lyrics_json = client.get_lyrics(track[0]['id'])
                 save_lyrics(format_lrc(lyrics_json), path=file_name)
