@@ -101,3 +101,33 @@ _Firefox_
 
 > You may have noticed a config.json in the code directory.
 > After finding sp_dc you should edit config file and set sp_dc to the value you found.
+
+```JSON
+{
+    "sp_dc": "",
+    "client_id": "",
+    "client_secret": "",
+    "download_path": "downloads",
+    "create_folder": true,
+    "folder_name": "{album} - {artist}",
+    "file_name": "{track_number}",
+    "synced_lyrics": true,
+    "force_synced": true
+}
+```
+See wiki for more details about the tags.
+
+### Usage
+> Make sure you have set the congig before starting
+
+1. Direct
+```
+python3 syrics.py
+Enter link: https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+```
+__It will ask for the link__
+
+2. Command line
+```
+python3 syrics.py https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+```
