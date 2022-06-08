@@ -61,7 +61,7 @@ def get_playlist_tracks(playlist_id: str):
 
 def format_lrc(lyrics_json):
     lyrics = lyrics_json['lyrics']['lines']
-    if lyrics_json['lyrics']['syncType'] == 'UNSYNCED' and not config['force_synced']:
+    if (lyrics_json['lyrics']['syncType'] == 'UNSYNCED' and not config['force_synced']) or not config['synced_lyrics']:
         lrc = [lines['words'] for lines in lyrics]
     else:
         lrc = []
@@ -113,6 +113,7 @@ def download_lyrics(track_ids: list):
         file_name = f"{config['download_path']}/{rename_using_format(config['file_name'], track)}.lrc"
         save_lyrics(format_lrc(lyrics_json), path=file_name)
 
+
 def fetch_files(path: str):
     files = [tracks for tracks in os.listdir(path) if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", tracks)]
     for files in tqdm(files):
@@ -122,6 +123,8 @@ def fetch_files(path: str):
                 file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
                 lyrics_json = client.get_lyrics(track[0]['id'])
                 save_lyrics(format_lrc(lyrics_json), path=file_name)
+
+                
 def main():
     print(logo)
     print('\n')
