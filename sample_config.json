@@ -7,5 +7,6 @@
     "folder_name": "{album} - {artist}",
     "file_name": "{track_number}",
     "synced_lyrics": true,
-    "force_synced": true
+    "force_synced": true,
+    "embed_lyrics": false
 }
