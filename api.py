@@ -32,3 +32,8 @@ class Spotify:
         params = 'format=json&market=from_token'
         req = self.session.get(f'https://spclient.wg.spotify.com/color-lyrics/v2/track/{track_id}', params=params)
         return req.json()
+    
+    def get_current_song(self):
+        req = self.session.get('https://api.spotify.com/v1/me/player/currently-playing')
+        return req.json()
+        
