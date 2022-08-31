@@ -5,7 +5,7 @@ from exceptions import NotValidSp_Dc
 
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
-EASY_REGEX = r'<script id="config" data-testid="config" type="application/json">(\S+)</script>'
+EASY_REGEX = r'<script id="session" data-testid="session" type="application/json">(\S+)</script>'
 
 
 class Spotify:
@@ -32,3 +32,8 @@ class Spotify:
         params = 'format=json&market=from_token'
         req = self.session.get(f'https://spclient.wg.spotify.com/color-lyrics/v2/track/{track_id}', params=params)
         return req.json()
+    
+    def get_current_song(self):
+        req = self.session.get('https://api.spotify.com/v1/me/player/currently-playing')
+        return req.json()
+        
