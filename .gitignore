@@ -205,3 +205,4 @@ cython_debug/
 config.json
 test.py
 embed.py
+.vscode
