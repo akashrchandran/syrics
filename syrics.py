@@ -15,8 +15,6 @@ try:
 except Exception as e:
     raise ConfigNotFound("Config file seems to be missing.") from e
 
-cmd_url = parse_cmd(config)
-
 logo = '''
      _______.____    ____ .______       __    ______     _______.
     /       |\   \  /   / |   _  \     |  |  /      |   /       |
@@ -28,10 +26,10 @@ logo = '''
 
 '''
 
+client = Spotify(config['sp_dc'])
+cmd_url = parse_cmd(config, client)
 print("Logging in....")
 os.system('cls' if os.name == 'nt' else 'clear')
-client = Spotify(config['sp_dc'])
-
 
 def get_album_tracks(album_id: str):
     album_data = client.album(album_id)
@@ -105,7 +103,6 @@ def download_lyrics(track_ids: list):
         file_name = f"{config['download_path']}/{rename_using_format(config['file_name'], track)}.lrc"
         save_lyrics(format_lrc(lyrics_json), path=file_name)
 
-
 def fetch_files(path: str):
     files = [tracks for tracks in os.listdir(path) if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", tracks)]
     for files in tqdm(files):
@@ -115,7 +112,6 @@ def fetch_files(path: str):
                 file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
                 lyrics_json = client.get_lyrics(track[0]['id'])
                 save_lyrics(format_lrc(lyrics_json), path=file_name)
-
                 
 def main():
     print(logo)

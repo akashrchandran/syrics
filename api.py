@@ -37,7 +37,7 @@ class Spotify:
     def get_lyrics(self, track_id: str):
         params = 'format=json&market=from_token'
         req = self.session.get(f'https://spclient.wg.spotify.com/color-lyrics/v2/track/{track_id}', params=params)
-        return req.json()
+        return req.json() if req.status_code == 200 else None
     
     def album(self, album_id):
         return self.sp.album(album_id)
@@ -50,3 +50,17 @@ class Spotify:
 
     def search(self, q, type, limit):
         return self.sp.search(q=q, type=type, limit=limit)
+
+    def select_user_playlist(self):
+        playlist = self.sp.current_user_playlists()['items']
+        for x, play in enumerate(playlist, start=1):
+            print(f"{x}: {play['name']}")
+        index = int(input("Enter the index of the playlist: "))
+        return playlist[index-1]
+
+    def select_user_album(self):
+        albums = self.sp.current_user_saved_albums()['items']
+        for x, album in enumerate(albums, start=1):
+            print(f"{x}: {album['album']['name']}")
+        index = int(input("Enter the index of the album: "))
+        return albums[index-1]['album']
