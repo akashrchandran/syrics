@@ -2,22 +2,18 @@ import json
 import os
 import re
 
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from tinytag import TinyTag
 from tqdm import tqdm
 
 from api import Spotify
 from cli import parse_cmd
 from exceptions import ConfigNotFound
-from tinytag import TinyTag
 
 try:
     with open("config.json") as f:
         config = json.load(f)
 except Exception as e:
     raise ConfigNotFound("Config file seems to be missing.") from e
-
-cmd_url = parse_cmd(config)
 
 logo = '''
      _______.____    ____ .______       __    ______     _______.
@@ -30,19 +26,13 @@ logo = '''
 
 '''
 
-auth_manager = SpotifyClientCredentials(
-                client_id=config['client_id'],
-                client_secret=config['client_secret']
-            )
-sp = spotipy.Spotify(auth_manager=auth_manager)
-
+client = Spotify(config['sp_dc'])
+cmd_url = parse_cmd(config, client)
 print("Logging in....")
 os.system('cls' if os.name == 'nt' else 'clear')
-client = Spotify(config['sp_dc'])
-
 
 def get_album_tracks(album_id: str):
-    album_data = sp.album(album_id)
+    album_data = client.album(album_id)
     print(f"> Album: {album_data['name']}")
     print(f"> Artist: {album_data['artists'][0]['name']}")
     print(f"> Songs: {album_data['total_tracks']} Tracks")
@@ -51,7 +41,7 @@ def get_album_tracks(album_id: str):
 
 
 def get_playlist_tracks(playlist_id: str):
-    play_data = sp.playlist(playlist_id)
+    play_data = client.playlist(playlist_id)
     print(f"> Playlist: {play_data['name']}")
     print(f"> Owner: {play_data['owner']['display_name']}")
     print(f"> Songs: {play_data['tracks']['total']} Tracks")
@@ -100,7 +90,7 @@ def rename_using_format(string: str, data: dict):
 
 
 def download_lyrics(track_ids: list):
-    tracks_data = sp.tracks(track_ids)['tracks']
+    tracks_data = client.tracks(track_ids)['tracks']
     if config['download_path'] and not os.path.exists(config['download_path']):
         os.mkdir(config['download_path'])
     unable = []
@@ -113,17 +103,15 @@ def download_lyrics(track_ids: list):
         file_name = f"{config['download_path']}/{rename_using_format(config['file_name'], track)}.lrc"
         save_lyrics(format_lrc(lyrics_json), path=file_name)
 
-
 def fetch_files(path: str):
     files = [tracks for tracks in os.listdir(path) if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", tracks)]
     for files in tqdm(files):
             tag = TinyTag.get(os.path.join(path, files))
-            query = sp.search(q=f"track:{tag.title} album:{tag.album}", type="track", limit=1)
+            query = client.search(q=f"track:{tag.title} album:{tag.album}", type="track", limit=1)
             if track := query['tracks']['items']:
                 file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
                 lyrics_json = client.get_lyrics(track[0]['id'])
                 save_lyrics(format_lrc(lyrics_json), path=file_name)
-
                 
 def main():
     print(logo)

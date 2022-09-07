@@ -105,8 +105,6 @@ _Firefox_
 ```JSON
 {
     "sp_dc": "",
-    "client_id": "",
-    "client_secret": "",
     "download_path": "downloads",
     "create_folder": true,
     "folder_name": "{album} - {artist}",
