@@ -52,6 +52,7 @@ mv sample_config.json config.json
 ```
 ren sample_config.json config.json
 ```
+> To get more detailed installation guide please check wiki's [installation page](https://github.com/akashrchandran/syrics/wiki/Installation)
 
 ### Finding sp_dc
 > Syrics sp_dc cookie to authenticate against Spotify in order to have access to the required services.
@@ -129,11 +130,23 @@ Enter link: https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
 ```
 python3 syrics.py https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
 ```
-_More arguments are availble check using_
-
+__changing download folder command__
+```
+python3 syrics.py --directory ~/Music/songs/ https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+```
+__download current playing song on authorized account__
+```
+python3 syrics.py --user current-playing
+```
+__downloading from user playlist__
+```
+python3 syrics.py --user playlist
+```
+__To see available commands__
 ```
 python3 syrics.py -h
 ```
+
 #### 3. Passing Folder path with music files (Experimental)
 
 ```
