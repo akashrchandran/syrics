@@ -52,7 +52,7 @@ mv sample_config.json config.json
 ```
 ren sample_config.json config.json
 ```
-
+> To get more detailed installation guide please check wiki's [installation page](https://github.com/akashrchandran/syrics/wiki/Installation)
 ### Finding sp_dc
 > Syrics sp_dc cookie to authenticate against Spotify in order to have access to the required services.
 
