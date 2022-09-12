@@ -27,7 +27,7 @@ Syrics
  
  <div align="center">
 
-A command line tool to fetch lyrics from spotify and save it to lrc file. It can fetch both synced and unsynced lyrics from spotify. 
+A command line tool to fetch lyrics from spotify and save it to lrc file. It can fetch both synced and unsynced lyrics from spotify. You can find API version at [akashrchandran/spotify-lyrics-api](https://github.com/akashrchandran/spotify-lyrics-api).
  
 </div>
  
