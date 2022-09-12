@@ -27,7 +27,7 @@ Syrics
  
  <div align="center">
 
-A command line tool to fetch lyrics from spotify and save it to lrc file. It can fetch both synced and unsynced lyrics from spotify. 
+A command line tool to fetch lyrics from spotify and save it to lrc file. It can fetch both synced and unsynced lyrics from spotify. You can find API version at [akashrchandran/spotify-lyrics-api](https://github.com/akashrchandran/spotify-lyrics-api).
  
 </div>
  
@@ -64,14 +64,14 @@ To obtain the cookies, these different methods can be used:
 
 _Using any extensions like [Cookie-Editor](https://cookie-editor.cgagnier.ca/#download) can easily help you find it_
 
-![Cookie-Editor](https://i.ibb.co/zJ1KDGP/Screenshot-from-2022-05-17-23-26-33.png)
+![Cookie-Editor](https://ik.imagekit.io/gyzvlawdz/Projects/syrics/osNXu7757H_LpeH0rfPQ.png)
 
 #### 2. Chromium based browser
 1. Make sure you are connected on https://open.spotify.com
 2. Open the url chrome://settings/cookies/detail?site=spotify.com or edge://settings/cookies/detail?site=spotify.com based on your browser.
 3. Copy the content from sp_dc cookies
 
-![Chrome_Based_Browser](https://i.ibb.co/DYrCQV0/Screenshot-from-2022-05-18-00-02-56.png)
+![Chrome_Based_Browser](https://ik.imagekit.io/gyzvlawdz/Projects/syrics/msedge_cdZLsj3pIE_90y-wyR7Y.png)
 
 #### 3. Developer Tools
 _Chrome based_
@@ -81,7 +81,7 @@ _Chrome based_
 4. In the menu on the left go to Storage/Cookies/open.spotify.com
 5. Find the sp_dc (use the filter tab to search for it) and copy the value
 
-![Using_Developer_Tools](https://i.ibb.co/RvwN206/Screenshot-from-2022-05-11-01-11-54.png)
+![Using_Developer_Tools](https://ik.imagekit.io/gyzvlawdz/Projects/syrics/msedge_jETepNS585_jAhqn0tRe.png)
 
 _Firefox_
 1. Make sure https://open.spotify.com is opened and you are connected
