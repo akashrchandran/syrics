@@ -10,8 +10,7 @@ parser.add_argument("-d",
 
 parser.add_argument("-u",
                     "--user",
-                    default="current",
-                    help="items to download from users account (cuurent-playing, album, playlist) (default: cuurent-playing)"
+                    help="items to download from users account (cuurent-playing, album, playlist)"
                     )
 
 parser.add_argument("URL",
