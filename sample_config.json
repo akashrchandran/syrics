@@ -3,7 +3,7 @@
     "download_path": "downloads",
     "create_folder": true,
     "folder_name": "{album} - {artist}",
-    "file_name": "{track_number}",
+    "file_name": "{track_number}. {name}",
     "synced_lyrics": true,
     "force_synced": true,
     "embed_lyrics": false
