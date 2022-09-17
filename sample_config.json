@@ -2,8 +2,9 @@
     "sp_dc": "",
     "download_path": "downloads",
     "create_folder": true,
-    "folder_name": "{album} - {artist}",
-    "file_name": "{track_number}",
+    "album_folder_name": "{name} - {artists}",
+    "play_folder_name": "{name} - {owner}",
+    "file_name": "{track_number}. {name}",
     "synced_lyrics": true,
     "force_synced": true,
     "embed_lyrics": false

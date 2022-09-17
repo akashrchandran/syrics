@@ -34,20 +34,24 @@ os.system('cls' if os.name == 'nt' else 'clear')
 
 def get_album_tracks(album_id: str):
     album_data = client.album(album_id)
+    album_data['artists'] = ','.join([artist['name'] for artist in album_data['artists']])
+    album_folder = rename_using_format(config['album_folder_name'], album_data)
     print(f"> Album: {album_data['name']}")
-    print(f"> Artist: {album_data['artists'][0]['name']}")
+    print(f"> Artist: {album_data['artists']}")
     print(f"> Songs: {album_data['total_tracks']} Tracks")
     print("\n")
-    return [tracks['id'] for tracks in album_data['tracks']['items']]
+    return [tracks['id'] for tracks in album_data['tracks']['items']], album_folder
 
 
 def get_playlist_tracks(playlist_id: str):
     play_data = client.playlist(playlist_id)
+    play_data['owner'] = play_data['owner']['display_name']
+    play_folder = rename_using_format(config['play_folder_name'], play_data)
     print(f"> Playlist: {play_data['name']}")
-    print(f"> Owner: {play_data['owner']['display_name']}")
+    print(f"> Owner: {play_data['owner']}")
     print(f"> Songs: {play_data['tracks']['total']} Tracks")
     print("\n")
-    return [tracks['track']['id'] for tracks in play_data['tracks']['items']]
+    return [tracks['track']['id'] for tracks in play_data['tracks']['items']], play_folder
 
 
 def format_lrc(lyrics_json):
@@ -87,34 +91,51 @@ def rename_using_format(string: str, data: dict):
     for match in matches:
         word = '{%s}' % match
         string = string.replace(word, str(data[match]))
-    return string
+    return re.sub(r'[\\/*?:"<>|]',"", string)
 
 
-def download_lyrics(track_ids: list):
+def download_lyrics(track_ids: list, folder: str = None):
     tracks_data = client.tracks(track_ids)['tracks']
-    if config['download_path'] and not os.path.exists(config['download_path']):
-        os.mkdir(config['download_path'])
     unable = []
+    if folder := f"{config['download_path']}/{folder}":
+        if config['create_folder'] and not os.path.exists(folder):
+            os.mkdir(folder)
+        else:
+            print("The album/playlist was already downloaded..skipping")
+            exit(0)
+    else:
+        folder = config['download_path']
     for track in tqdm(tracks_data):
         sanitize_track_data(track)
         lyrics_json = client.get_lyrics(track['id'])
         if not lyrics_json:
-            unable.append(track)
+            unable.append(track['name'])
             continue
-        file_name = f"{config['download_path']}/{rename_using_format(config['file_name'], track)}.lrc"
+        file_name = f"{folder}/{rename_using_format(config['file_name'], track)}.lrc"
         save_lyrics(format_lrc(lyrics_json), path=file_name)
+    return unable
 
 def fetch_files(path: str):
     files = [tracks for tracks in os.listdir(path) if re.search("\.(flac|mp3|wav|ogg|opus|m4a|aiff)$", tracks)]
+    unable = []
     for files in tqdm(files):
             tag = TinyTag.get(os.path.join(path, files))
             query = client.search(q=f"track:{tag.title} album:{tag.album}", type="track", limit=1)
             if track := query['tracks']['items']:
                 file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
                 lyrics_json = client.get_lyrics(track[0]['id'])
+                if not lyrics_json:
+                    unable.append(tag.title)
+                    continue
                 save_lyrics(format_lrc(lyrics_json), path=file_name)
+            else:
+                unable.append(tag.title)
+    return unable
+
                 
 def main():
+    if config['download_path'] and not os.path.exists(config['download_path']):
+        os.mkdir(config['download_path'])
     print(logo)
     print('\n')
     account = client.get_me()
@@ -125,17 +146,22 @@ def main():
     link = cmd_url or input("Enter Link: ")
     if 'spotify' in link:
         if 'album' in link:
-            track_ids = get_album_tracks(link)
+            track_ids, folder = get_album_tracks(link)
         elif 'playlist' in link:
-            track_ids = get_playlist_tracks(link)
+            track_ids, folder= get_playlist_tracks(link)
         elif 'track' in link:
             track_ids = [link]
+            folder = None
         else:
             print("Enter valid url!")
             exit(0)
-        download_lyrics(track_ids)
+        unable = download_lyrics(track_ids, folder)
     else:
-        fetch_files(link)
+        unable = fetch_files(link)
+    if unable:
+        print("\nsome tracks does not have lyrics, so skipped:")
+        for tracks in unable:
+            print(tracks)
 
 
 if __name__ == "__main__":
