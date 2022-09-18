@@ -93,11 +93,14 @@ def rename_using_format(string: str, data: dict):
         string = string.replace(word, str(data[match]))
     return re.sub(r'[\\/*?:"<>|]',"", string)
 
+def chunk(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 def download_lyrics(track_ids: list, folder: str = None):
-    tracks_data = client.tracks(track_ids)['tracks']
     unable = []
-    if folder := f"{config['download_path']}/{folder}":
+    if folder:
+        folder = f"{config['download_path']}/{folder}"
         if config['create_folder'] and not os.path.exists(folder):
             os.mkdir(folder)
         else:
@@ -105,6 +108,9 @@ def download_lyrics(track_ids: list, folder: str = None):
             exit(0)
     else:
         folder = config['download_path']
+    tracks_data = []
+    for trackid in chunk(track_ids, 50):
+        tracks_data += client.tracks(trackid)['tracks']
     for track in tqdm(tracks_data):
         sanitize_track_data(track)
         lyrics_json = client.get_lyrics(track['id'])
