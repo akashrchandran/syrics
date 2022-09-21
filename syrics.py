@@ -40,7 +40,7 @@ def get_album_tracks(album_id: str):
     print(f"> Artist: {album_data['artists']}")
     print(f"> Songs: {album_data['total_tracks']} Tracks")
     print("\n")
-    return [tracks['id'] for tracks in album_data['tracks']['items']], album_folder
+    return client.album_tracks(album_id, album_data['total_tracks']), album_folder
 
 
 def get_playlist_tracks(playlist_id: str):
@@ -51,7 +51,7 @@ def get_playlist_tracks(playlist_id: str):
     print(f"> Owner: {play_data['owner']}")
     print(f"> Songs: {play_data['tracks']['total']} Tracks")
     print("\n")
-    return [tracks['track']['id'] for tracks in play_data['tracks']['items']], play_folder
+    return client.playlist_tracks(playlist_id, play_data['tracks']['total']), play_folder
 
 
 def format_lrc(lyrics_json):
