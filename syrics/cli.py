@@ -1,4 +1,5 @@
 import argparse
+import json
 
 parser = argparse.ArgumentParser()
 
@@ -32,3 +33,17 @@ def parse_cmd(config, client):
     elif args.user in ['album']:
         args.URL = client.select_user_album()['external_urls']['spotify']
     return args.URL
+
+def create_config(CONFIG_FILE):
+    config = {
+        'sp_dc': "", 
+        'download_path': "downloads", 
+        'create_folder': True, 
+        'album_folder_name': "{name} - {artists}", 
+        'play_folder_name': "{name} - {owner}", 
+        'file_name': "{track_number}. {name}",
+        'synced_lyrics': True, 
+        'force_synced': False
+     }
+    with open(CONFIG_FILE, "w+") as f:
+        f.write(json.dumps(config, indent=4))
