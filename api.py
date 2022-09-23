@@ -47,6 +47,7 @@ class Spotify:
         for x in range(0, total, 50):
             album = self.sp.album_tracks(album_id, offset=x)
             tracks += [track['id'] for track in album['items']]
+        tracks =  [x for x in tracks if x is not None]
         return tracks
 
     def playlist(self, playlist_id):
@@ -57,6 +58,7 @@ class Spotify:
         for x in range(0, total, 100):
             play = self.sp.playlist_tracks(playlist_id, offset=x)
             tracks += [track['track']['id'] for track in play['items']]
+        tracks =  [x for x in tracks if x is not None]
         return tracks
     
     def tracks(self, tracks):
