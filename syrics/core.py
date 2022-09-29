@@ -80,7 +80,7 @@ def format_lrc(lyrics_json):
         for lines in lyrics:
             duration = int(lines['startTimeMs'])
             minutes, seconds = divmod(duration / 1000, 60)
-            lrc.append(f'[{minutes:0>2.0f}:{seconds:.3f}] {lines["words"]}')
+            lrc.append(f'[{minutes:0>2.0f}:{seconds:05.2f}] {lines["words"]}')
     return '\n'.join(lrc)
 
 
