@@ -14,18 +14,14 @@ from syrics.exceptions import CorruptedConfig
 platform = os.name == "nt"
 if platform:
     OS_CONFIG = os.environ.get("APPDATA")
-    EDIT_CMD = "notepad.exe"
 else:
     OS_CONFIG = os.path.join(os.environ["HOME"], ".config")
-    EDIT_CMD = "nano"
-
 
 CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
 CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
 if not os.path.isdir(CONFIG_PATH) or not os.path.isfile(CONFIG_FILE):
         os.makedirs(CONFIG_PATH, exist_ok=True)
         create_config(CONFIG_FILE)
-        os.system(f"{EDIT_CMD} {CONFIG_FILE}")
 
 try:
     with open(CONFIG_FILE) as f:
