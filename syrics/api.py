@@ -4,7 +4,7 @@ import re
 import requests
 import spotipy
 
-from exceptions import NotValidSp_Dc
+from syrics.exceptions import NotValidSp_Dc
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
 EASY_REGEX = r'<script id="session" data-testid="session" type="application/json">(\S+)</script>'
@@ -29,7 +29,10 @@ class Spotify:
             raise NotValidSp_Dc("sp_dc provided is invalid, please check it again!") from e
 
     def get_me(self):
-        return self.sp.current_user()
+        try:
+            return self.sp.current_user()
+        except Exception as e:
+            raise NotValidSp_Dc("sp_dc provided is invalid, please check it again!") from e
 
     def get_current_song(self):
         return self.sp.currently_playing()

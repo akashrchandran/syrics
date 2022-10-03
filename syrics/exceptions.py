@@ -1,6 +1,5 @@
 class NotValidSp_Dc(Exception):
     pass
 
-
-class ConfigNotFound(Exception):
+class CorruptedConfig(Exception):
     pass

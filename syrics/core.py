@@ -6,15 +6,9 @@ import re
 from tinytag import TinyTag
 from tqdm import tqdm
 
-from api import Spotify
-from cli import parse_cmd
-from exceptions import ConfigNotFound
-
-try:
-    with open("config.json") as f:
-        config = json.load(f)
-except Exception as e:
-    raise ConfigNotFound("Config file seems to be missing.") from e
+from syrics.api import Spotify
+from syrics.cli import parse_cmd, create_config
+from syrics.exceptions import CorruptedConfig
 
 logo = '''
      _______.____    ____ .______       __    ______     _______.
@@ -27,10 +21,22 @@ logo = '''
 
 '''
 
+OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
+
+CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
+CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
+if not os.path.isdir(CONFIG_PATH) or not os.path.isfile(CONFIG_FILE):
+        os.makedirs(CONFIG_PATH, exist_ok=True)
+        create_config(CONFIG_FILE, False)
+
+try:
+    with open(CONFIG_FILE) as f:
+        config = json.load(f)
+except Exception as e:
+    raise CorruptedConfig("Config file seems corrupted, run syrics -c reset") from e
+
 client = Spotify(config['sp_dc'])
 cmd_url = parse_cmd(config, client)
-print("Logging in....")
-os.system('cls' if os.name == 'nt' else 'clear')
 
 def get_album_tracks(album_id: str):
     album_data = client.album(album_id)
@@ -137,7 +143,6 @@ def fetch_files(path: str):
             else:
                 unable.append(tag.title)
     return unable
-
                 
 def main():
     if config['download_path'] and not os.path.exists(config['download_path']):
@@ -168,7 +173,3 @@ def main():
         print("\nsome tracks does not have lyrics, so skipped:")
         for tracks in unable:
             print(tracks)
-
-
-if __name__ == "__main__":
-    main()
