@@ -38,3 +38,7 @@ setup(
     ],
     python_requires=">=3.6",
 )
+
+# rm -f dist/*
+# python3 setup.py sdist bdist_wheel
+# twine upload dist/*

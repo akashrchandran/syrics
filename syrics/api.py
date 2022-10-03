@@ -20,10 +20,13 @@ class Spotify:
         self.sp = spotipy.Spotify(self.token)
 
     def login(self):
-        req = self.session.get('https://open.spotify.com/', allow_redirects=False)
-        token = json.loads(re.search(EASY_REGEX, req.text)[1])
-        self.token = token['accessToken']
-        self.session.headers['authorization'] = f"Bearer {self.token}"
+        try:
+            req = self.session.get('https://open.spotify.com/', allow_redirects=False)
+            token = json.loads(re.search(EASY_REGEX, req.text)[1])
+            self.token = token['accessToken']
+            self.session.headers['authorization'] = f"Bearer {self.token}"
+        except Exception as e:
+            raise NotValidSp_Dc("sp_dc provided is invalid, please check it again!") from e
 
     def get_me(self):
         try:

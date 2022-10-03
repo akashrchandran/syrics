@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import json
 import os
-from platform import platform
 import re
 
 from tinytag import TinyTag
@@ -10,24 +9,6 @@ from tqdm import tqdm
 from syrics.api import Spotify
 from syrics.cli import parse_cmd, create_config
 from syrics.exceptions import CorruptedConfig
-
-platform = os.name == "nt"
-if platform:
-    OS_CONFIG = os.environ.get("APPDATA")
-else:
-    OS_CONFIG = os.path.join(os.environ["HOME"], ".config")
-
-CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
-CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
-if not os.path.isdir(CONFIG_PATH) or not os.path.isfile(CONFIG_FILE):
-        os.makedirs(CONFIG_PATH, exist_ok=True)
-        create_config(CONFIG_FILE)
-
-try:
-    with open(CONFIG_FILE) as f:
-        config = json.load(f)
-except Exception as e:
-    raise CorruptedConfig("Config file seems corrupted") from e
 
 logo = '''
      _______.____    ____ .______       __    ______     _______.
@@ -40,10 +21,22 @@ logo = '''
 
 '''
 
+OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
+
+CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
+CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
+if not os.path.isdir(CONFIG_PATH) or not os.path.isfile(CONFIG_FILE):
+        os.makedirs(CONFIG_PATH, exist_ok=True)
+        create_config(CONFIG_FILE, False)
+
+try:
+    with open(CONFIG_FILE) as f:
+        config = json.load(f)
+except Exception as e:
+    raise CorruptedConfig("Config file seems corrupted, run syrics -c reset") from e
+
 client = Spotify(config['sp_dc'])
 cmd_url = parse_cmd(config, client)
-print("Logging in....")
-os.system('cls' if platform else 'clear')
 
 def get_album_tracks(album_id: str):
     album_data = client.album(album_id)
