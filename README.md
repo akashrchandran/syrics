@@ -36,21 +36,10 @@ A command line tool to fetch lyrics from spotify and save it to lrc file. It can
 
 > You will need a **spotify account**, free also works
 
-### Install with git clone
+### Install with pip
 
 ```
-git clone https://github.com/akashrchandran/syrics
-cd syrics
-pip install -r requirements.txt
-```
-### Change sample_config.json to config.json
-*On Linux or Mac*
-```
-mv sample_config.json config.json
-```
-*On Windows*
-```
-ren sample_config.json config.json
+pip3 install syrics
 ```
 > To get more detailed installation guide please check wiki's [installation page](https://github.com/akashrchandran/syrics/wiki/Installation)
 
@@ -59,10 +48,24 @@ ren sample_config.json config.json
 
 The methods are explained in the [wiki](https://github.com/akashrchandran/syrics/wiki/Finding-sp_dc).
 
-### Config File
+### Config
+> When you run the program for the first time, it will directly create config and open editing.
 
-> You may have noticed a config.json in the code directory.
+*To edit config*
+
+```
+syrics --config
+```
+
+*To reset config to default values*
+
+```
+syrics --config reset
+```
+
 > After finding sp_dc you should edit config file and set sp_dc to the value you found.
+
+*Default values of config*
 
 ```JSON
 {
@@ -74,7 +77,6 @@ The methods are explained in the [wiki](https://github.com/akashrchandran/syrics
     "file_name": "{track_number}. {name}",
     "synced_lyrics": true,
     "force_synced": true,
-    "embed_lyrics": false
 }
 ```
 See wiki for more details about the tags. (Still in development)
@@ -84,34 +86,34 @@ See wiki for more details about the tags. (Still in development)
 
 #### 1. Direct
 ```
-python3 syrics.py
+syrics
 Enter link: https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
 ```
  __It will ask for the link__
 
 #### 2. Passing link as commandline argument
 ```
-python3 syrics.py https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+syrics https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
 ```
 __changing download folder command__
 ```
-python3 syrics.py --directory ~/Music/songs/ https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
+syrics --directory ~/Music/songs/ https://open.spotify.com/track/2eAvDnpXP5W0cVtiI0PUxV
 ```
 __download current playing song on authorized account__
 ```
-python3 syrics.py --user current-playing
+syrics --user current-playing
 ```
 __downloading from user playlist__
 ```
-python3 syrics.py --user playlist
+syrics --user playlist
 ```
 __To see available commands__
 ```
-python3 syrics.py -h
+syrics -h
 ```
 
 #### 3. Passing Folder path with music files (Experimental)
 
 ```
-pythpn3 syrics.py /home/public_user/Music/songs
+syrics /home/public_user/Music/songs
 ```
