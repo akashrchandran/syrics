@@ -4,7 +4,7 @@ import re
 import requests
 import spotipy
 
-from syrics.exceptions import NotValidSp_Dc
+from syrics.exceptions import NotValidSp_Dc, NoSongPlaying
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
 EASY_REGEX = r'<script id="session" data-testid="session" type="application/json">(\S+)</script>'
@@ -35,7 +35,10 @@ class Spotify:
             raise NotValidSp_Dc("sp_dc provided is invalid, please check it again!") from e
 
     def get_current_song(self):
-        return self.sp.currently_playing()
+        try:
+            return self.sp.currently_playing()
+        except Exception as e:
+            raise NoSongPlaying("No song is currently playing.") from e
 
     def get_lyrics(self, track_id: str):
         params = 'format=json&market=from_token'

@@ -3,3 +3,6 @@ class NotValidSp_Dc(Exception):
 
 class CorruptedConfig(Exception):
     pass
+
+class NoSongPlaying(Exception):
+    pass
