@@ -54,7 +54,7 @@ def input_taker(config, key, question, string = True):
     if ans := input():
         config[key] = ans if string else bool(int(ans))
 
-def create_config(config_exits = True):
+def create_config(config_exists = True):
     print("Editing Config File...")
     config = {
         'sp_dc': "", 
@@ -66,7 +66,7 @@ def create_config(config_exits = True):
         'synced_lyrics': True, 
         'force_synced': False
     }
-    if config_exits:
+    if config_exists:
         OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
         CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
         CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")

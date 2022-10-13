@@ -27,7 +27,7 @@ CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
 CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
 if not os.path.isdir(CONFIG_PATH) or not os.path.isfile(CONFIG_FILE):
         os.makedirs(CONFIG_PATH, exist_ok=True)
-        create_config(config_exits=False)
+        create_config(config_exists=False)
 
 try:
     with open(CONFIG_FILE) as f:
