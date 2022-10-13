@@ -107,8 +107,8 @@ def download_lyrics(track_ids: list, folder: str = None):
     unable = []
     if folder:
         folder = f"{config['download_path']}/{folder}"
-        if config['create_folder'] and not os.path.exists(folder):
-            os.mkdir(folder)
+        if config['create_folder'] and not os.path.exists(folder) and config.get('force_download'):
+            os.makedirs(folder, exist_ok=True)
         else:
             print("The album/playlist was already downloaded..skipping")
             exit(0)

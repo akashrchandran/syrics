@@ -56,6 +56,7 @@ def input_taker(config, key, question, string = True):
 
 def create_config(config_exists = True):
     print("Editing Config File...")
+    print("To keep the current value just press enter!")
     config = {
         'sp_dc': "", 
         'download_path': "downloads", 
@@ -64,7 +65,7 @@ def create_config(config_exists = True):
         'play_folder_name': "{name} - {owner}", 
         'file_name': "{track_number}. {name}",
         'synced_lyrics': True, 
-        'force_synced': False
+        'force_download': False
     }
     if config_exists:
         OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
@@ -79,7 +80,7 @@ def create_config(config_exists = True):
     input_taker(config, 'play_folder_name', "Enter the playlist folder naming format: ")
     input_taker(config, 'file_name', "Enter the file naming format: ")
     input_taker(config, 'synced_lyrics', "Get synced lyrics: (0: False, 1: True)", string=False)
-    input_taker(config, 'force_synced', "Only get synced lyrics: (0: False, 1: True)", string=False)
+    input_taker(config, 'force_download', "Skip check for if it already exists: (0: False, 1: True)", string=False)
     with open(CONFIG_FILE, "w+") as f:
         f.write(json.dumps(config, indent=4))
     print("config sucessfully setup, run the program again.")
