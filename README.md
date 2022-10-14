@@ -117,3 +117,11 @@ syrics -h
 ```
 syrics /home/public_user/Music/songs
 ```
+
+### Use as a module
+
+```python
+from syrics.api import Spotify
+sp = Spotify("SP_DC here!")
+sp.get_lyrics("28RQx5pH9T9LZXY02IheWc")
+```
