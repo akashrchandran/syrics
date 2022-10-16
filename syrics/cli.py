@@ -54,7 +54,7 @@ def parse_cmd(config, client):
     if args.config == 'edit':
         create_config()
     elif args.config in ["reset", "r"]:
-        create_config(False)
+        create_config(config_exists = False)
     return args.URL
 
 def input_taker(config, key, question, string = True):
@@ -62,6 +62,17 @@ def input_taker(config, key, question, string = True):
     print(f"[SAVED]: {str(config[key])[:20]}")
     if ans := input():
         config[key] = ans if string else bool(int(ans))
+
+def check_config():
+    global CONFIG_FILE
+    OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
+    CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
+    CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
+    if not os.path.exists(CONFIG_FILE):
+        os.makedirs(CONFIG_PATH, exist_ok=True)
+        create_config(config_exists=False)
+    return CONFIG_FILE
+
 
 def create_config(config_exists = True):
     print("Editing Config File...")
@@ -76,9 +87,6 @@ def create_config(config_exists = True):
         'synced_lyrics': True, 
         'force_download': False
     }
-    OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
-    CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
-    CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
     if config_exists:
         with open(CONFIG_FILE) as f:
             config = json.load(f)

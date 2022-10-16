@@ -7,7 +7,7 @@ from tinytag import TinyTag
 from tqdm import tqdm
 
 from syrics.api import Spotify
-from syrics.cli import parse_cmd, create_config
+from syrics.cli import parse_cmd, check_config
 from syrics.exceptions import CorruptedConfig
 
 logo = '''
@@ -21,14 +21,7 @@ logo = '''
 
 '''
 
-OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
-
-CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
-CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
-if not os.path.isdir(CONFIG_PATH) or not os.path.isfile(CONFIG_FILE):
-        os.makedirs(CONFIG_PATH, exist_ok=True)
-        create_config(config_exists=False)
-
+CONFIG_FILE = check_config()
 try:
     with open(CONFIG_FILE) as f:
         config = json.load(f)
