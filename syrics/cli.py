@@ -10,6 +10,13 @@ parser.add_argument("-d",
                     help='directory for downloads'
                     )
 
+parser.add_argument("-f",
+                    "--force",
+                    metavar="BOOLEAN",
+                    default=True,
+                    help='Skip check for if it already exists '
+                    )
+
 parser.add_argument("-c",
                     "--config",
                     nargs='?',
@@ -35,6 +42,8 @@ def parse_cmd(config, client):
     args = parser.parse_args()
     if args.directory:
         config['download_path'] = args.directory
+    if args.force:
+        config['force_download'] = args.force
     if args.user in ['current', 'current-playing']:
         args.URL = client.get_current_song(
         )['item']['external_urls']['spotify']
@@ -67,10 +76,10 @@ def create_config(config_exists = True):
         'synced_lyrics': True, 
         'force_download': False
     }
+    OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
+    CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
+    CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
     if config_exists:
-        OS_CONFIG = os.environ.get("APPDATA") if os.name == "nt" else os.path.join(os.environ["HOME"], ".config")
-        CONFIG_PATH = os.path.join(OS_CONFIG, "syrics")
-        CONFIG_FILE = os.path.join(CONFIG_PATH, "config.json")
         with open(CONFIG_FILE) as f:
             config = json.load(f)
     input_taker(config, 'sp_dc', "Enter the sp_dc: ")
