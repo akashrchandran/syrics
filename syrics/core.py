@@ -55,7 +55,7 @@ def get_playlist_tracks(playlist_id: str):
 
 def format_lrc(lyrics_json):
     lyrics = lyrics_json['lyrics']['lines']
-    if (lyrics_json['lyrics']['syncType'] == 'UNSYNCED' and not config['force_synced']) or not config['synced_lyrics']:
+    if lyrics_json['lyrics']['syncType'] == 'UNSYNCED' or not config['synced_lyrics']:
         lrc = [lines['words'] for lines in lyrics]
     else:
         lrc = []
@@ -132,7 +132,8 @@ def fetch_files(path: str):
                 if not lyrics_json:
                     unable.append(tag.title)
                     continue
-                save_lyrics(format_lrc(lyrics_json), path=file_name)
+                if not os.path.exists(file_name) and config.get('force_download'):
+                    save_lyrics(format_lrc(lyrics_json), path=file_name)
             else:
                 unable.append(tag.title)
     return unable
