@@ -1,13 +1,10 @@
-import json
-import re
-
 import requests
 import spotipy
 
 from syrics.exceptions import NotValidSp_Dc, NoSongPlaying
 
+TOKEN_URL = 'https://open.spotify.com/get_access_token?reason=transport&productType=web_player'
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
-EASY_REGEX = r'<script id="session" data-testid="session" type="application/json">(\S+)</script>'
 
 
 class Spotify:
@@ -21,8 +18,8 @@ class Spotify:
 
     def login(self):
         try:
-            req = self.session.get('https://open.spotify.com/', allow_redirects=False)
-            token = json.loads(re.search(EASY_REGEX, req.text)[1])
+            req = self.session.get(TOKEN_URL, allow_redirects=False)
+            token = req.json()
             self.token = token['accessToken']
             self.session.headers['authorization'] = f"Bearer {self.token}"
         except Exception as e:
