@@ -61,13 +61,19 @@ def get_playlist_tracks(playlist_id: str):
     return client.playlist_tracks(playlist_id, play_data['tracks']['total']), play_folder
 
 
-def format_lrc(lyrics_json):
+def format_lrc(lyrics_json, track_data):
     lyrics = lyrics_json['lyrics']['lines']
-    if lyrics_json['lyrics']['syncType'] == 'UNSYNCED' or not config['synced_lyrics']:
-        lrc = [lines['words'] for lines in lyrics]
-    else:
-        lrc = []
-        for lines in lyrics:
+    minutes, seconds = divmod(int(track_data["duration_ms"]) / 1000, 60)
+    lrc = [
+        f'[ti:{track_data["name"]}]',
+        f'[al:{track_data["album_name"]}]',
+        f'[ar:{track_data["artist"]}]',
+        f'[length: {minutes:0>2.0f}:{seconds:05.2f}]',
+    ]
+    for lines in lyrics:
+        if lyrics_json['lyrics']['syncType'] == 'UNSYNCED' or not config['synced_lyrics']:
+            lrc.append(lines['words'])
+        else:
             duration = int(lines['startTimeMs'])
             minutes, seconds = divmod(duration / 1000, 60)
             lrc.append(f'[{minutes:0>2.0f}:{seconds:05.2f}] {lines["words"]}')
@@ -125,7 +131,7 @@ def download_lyrics(track_ids: list, folder: str = None):
             unable.append(track['name'])
             continue
         file_name = f"{folder}/{rename_using_format(config['file_name'], track)}.lrc"
-        save_lyrics(format_lrc(lyrics_json), path=file_name)
+        save_lyrics(format_lrc(lyrics_json, track), path=file_name)
     return unable
 
 def fetch_files(path: str):
@@ -135,13 +141,14 @@ def fetch_files(path: str):
             tag = TinyTag.get(os.path.join(path, files))
             query = client.search(q=f"track:{tag.title} album:{tag.album}", type="track", limit=1)
             if track := query['tracks']['items']:
+                sanitize_track_data(track[0])
                 file_name = f"{os.path.splitext(tag._filehandler.name)[0]}.lrc"
                 lyrics_json = client.get_lyrics(track[0]['id'])
                 if not lyrics_json:
                     unable.append(tag.title)
                     continue
                 if not os.path.exists(file_name) and config.get('force_download'):
-                    save_lyrics(format_lrc(lyrics_json), path=file_name)
+                    save_lyrics(format_lrc(lyrics_json, track[0]), path=file_name)
             else:
                 unable.append(tag.title)
     return unable
