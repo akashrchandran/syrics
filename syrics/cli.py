@@ -7,50 +7,50 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-d",
                     "--directory",
                     metavar="PATH",
-                    help='directory for downloads'
+                    help='give path to download directory.'
                     )
 
 parser.add_argument("-f",
                     "--force",
                     metavar="BOOLEAN",
                     default=True,
-                    help='Skip check for if it already exists '
+                    help='Skip check for if it already downloader and available in directory. '
                     )
 
 parser.add_argument("-c",
                     "--config",
                     nargs='?',
                     const="edit",
-                    help='Edit/reset config file.'
+                    help='edit config file or reset it.'
                     )
 
 parser.add_argument("-u",
                     "--user",
                     nargs='?',
                     const="current",
-                    help="items to download from users account (cuurent-playing, album, playlist)"
+                    help="items to download from users account like playlist, tracks etc.",
+                    choices=['current', 'album', 'play']
                     )
 
 parser.add_argument("URL",
                     metavar="URL",
                     nargs="?",
-                    help=("URL to get lyrics from spotify"),
+                    help=("url of song, album or playlist from spotify."),
                     )
 
 
-def parse_cmd(config, client):
+def parse_cmd(config):
     args = parser.parse_args()
     if args.directory:
         config['download_path'] = args.directory
     if args.force:
         config['force_download'] = args.force
     if args.user in ['current', 'current-playing']:
-        args.URL = client.get_current_song(
-        )['item']['external_urls']['spotify']
+        args.URL = 'current'
     elif args.user in ['play', 'playlist']:
-        args.URL = client.select_user_playlist()['external_urls']['spotify']
+        args.URL = 'play'
     elif args.user in ['album']:
-        args.URL = client.select_user_album()['external_urls']['spotify']
+        args.URL = 'album'
     if args.config == 'edit':
         create_config()
     elif args.config in ["reset", "r"]:
