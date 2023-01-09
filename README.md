@@ -21,7 +21,7 @@ Syrics
 
 <div align="center">
 
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+[![syrics logo](https://ik.imagekit.io/gyzvlawdz/Projects/syrics/Black_Modern_Business_Logo__600___500_px___2240___1260_px__cYRO9HGTQ.png)](https://pypi.org/project/syrics/)
  
 </div>
  
