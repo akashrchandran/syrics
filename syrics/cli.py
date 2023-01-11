@@ -14,7 +14,7 @@ parser.add_argument("-f",
                     "--force",
                     metavar="BOOLEAN",
                     default=True,
-                    help='Skip check for if it already downloader and available in directory. '
+                    help='skip check for if it already downloaded and is available in directory. '
                     )
 
 parser.add_argument("-c",
@@ -59,7 +59,7 @@ def parse_cmd(config):
 
 def input_taker(config, key, question, string = True):
     print(question)
-    print(f"[SAVED]: {str(config[key])[:20]}")
+    print(f"[SAVED]: {str(config[key])[:50]}")
     if ans := input():
         config[key] = ans if string else bool(int(ans))
 
