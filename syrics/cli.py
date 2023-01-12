@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import subprocess
 
 parser = argparse.ArgumentParser()
 
@@ -55,6 +56,8 @@ def parse_cmd(config):
         create_config()
     elif args.config in ["reset", "r"]:
         create_config(config_exists = False)
+    elif args.config in ["open", "o"]:
+        open_config()
     return args.URL
 
 def input_taker(config, key, question, string = True):
@@ -101,4 +104,11 @@ def create_config(config_exists = True):
     with open(CONFIG_FILE, "w+") as f:
         f.write(json.dumps(config, indent=4))
     print("config sucessfully setup, run the program again.")
+    exit(1)
+
+def open_config():
+    if os.name == "nt":
+        subprocess.call(["notepad", CONFIG_FILE])
+    else:
+        subprocess.call(["nano", CONFIG_FILE])
     exit(1)
