@@ -38,6 +38,11 @@ A command line tool to fetch lyrics from spotify and save it to lrc file. It can
 ```
 pip3 install syrics
 ```
+### Upgrade with pip
+
+```
+pip3 install syrics --upgrade
+```
 > To get more detailed installation guide please check wiki's [installation page](https://github.com/akashrchandran/syrics/wiki/Installation)
 
 ### Finding sp_dc
@@ -59,7 +64,10 @@ syrics --config
 ```
 syrics --config reset
 ```
-
+*To open config in notepad or nano text editors*
+```
+syrics --config open
+```
 > After finding sp_dc you should edit config file and set sp_dc to the value you found.
 
 *Default values of config*
@@ -77,7 +85,7 @@ syrics --config reset
     "force_synced": false
 }
 ```
-See wiki for more details about the tags. (Still in development)
+See wiki for more details about the format tag detailts in [config keys](https://github.com/akashrchandran/syrics/wiki/Config-Keys).
 
 ### Usage
 > Make sure you have set the congig before starting

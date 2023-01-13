@@ -45,19 +45,19 @@ def get_album_tracks(album_id: str):
     album_folder = rename_using_format(config['album_folder_name'], album_data)
     print(f"> Album: {album_data['name']}")
     print(f"> Artist: {album_data['artists']}")
-    print(f"> Songs: {album_data['total_tracks']} Tracks")
-    print("\n")
+    print(f"> Songs: {album_data['total_tracks']} Tracks", end='\n\n')
     return client.album_tracks(album_id, album_data['total_tracks']), album_folder
 
 
 def get_playlist_tracks(playlist_id: str):
     play_data = client.playlist(playlist_id)
     play_data['owner'] = play_data['owner']['display_name']
+    play_data['total_tracks'] = play_data['tracks']['total']
+    play_data['collaborative'] = '[C]' if play_data['collaborative'] else ''
     play_folder = rename_using_format(config['play_folder_name'], play_data)
     print(f"> Playlist: {play_data['name']}")
     print(f"> Owner: {play_data['owner']}")
-    print(f"> Songs: {play_data['tracks']['total']} Tracks")
-    print("\n")
+    print(f"> Songs: {play_data} Tracks", end='\n\n')
     return client.playlist_tracks(playlist_id, play_data['tracks']['total']), play_folder
 
 
@@ -92,6 +92,8 @@ def sanitize_track_data(track_data: dict):
     track_data['album_artist'] = ','.join(
         [artist['name'] for artist in album_data['artists']])
     track_data['artist'] = ','.join([artist['name'] for artist in artist_data])
+    track_data['explicit'] = '[E]' if track_data['explicit'] else ''
+    print(track_data)
 
 
 def save_lyrics(lyrics, path):
@@ -156,13 +158,11 @@ def fetch_files(path: str):
 def main():
     if config['download_path'] and not os.path.exists(config['download_path']):
         os.mkdir(config['download_path'])
-    print(logo)
-    print('\n')
+    print(logo, end='\n\n')
     account = client.get_me()
     print("Successfully Logged In as:")
     print("Name: " + account["display_name"])
-    print("Country: " + account["country"])
-    print('\n')
+    print("Country: " + account["country"], end='\n\n')
     link = cmd_url or input("Enter Link: ")
     if 'spotify' in link:
         if 'album' in link:
