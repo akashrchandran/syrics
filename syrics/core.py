@@ -93,7 +93,6 @@ def sanitize_track_data(track_data: dict):
         [artist['name'] for artist in album_data['artists']])
     track_data['artist'] = ','.join([artist['name'] for artist in artist_data])
     track_data['explicit'] = '[E]' if track_data['explicit'] else ''
-    print(track_data)
 
 
 def save_lyrics(lyrics, path):
