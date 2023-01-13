@@ -72,7 +72,9 @@ syrics --config reset
     "album_folder_name": "{name} - {artists}",
     "play_folder_name": "{name} - {owner}",
     "file_name": "{track_number}. {name}",
-    "synced_lyrics": true
+    "synced_lyrics": true,
+    "force_download": false,
+    "force_synced": false
 }
 ```
 See wiki for more details about the tags. (Still in development)
