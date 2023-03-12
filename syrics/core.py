@@ -21,23 +21,6 @@ logo = '''
 
 '''
 
-CONFIG_FILE = check_config()
-try:
-    with open(CONFIG_FILE) as f:
-        config = json.load(f)
-except Exception as e:
-    raise CorruptedConfig("Config file seems corrupted, run syrics -c reset") from e
-
-cmd_url = parse_cmd(config)
-
-client = Spotify(config['sp_dc'])
-
-if cmd_url == 'current':
-    cmd_url = client.get_current_song( )['item']['external_urls']['spotify']
-elif cmd_url == 'play':
-    cmd_url = client.select_user_playlist()['external_urls']['spotify']
-elif cmd_url == 'album':
-    cmd_url = client.select_user_album()['external_urls']['spotify']
 
 def get_album_tracks(album_id: str):
     album_data = client.album(album_id)
@@ -153,8 +136,26 @@ def fetch_files(path: str):
             else:
                 unable.append(tag.title)
     return unable
-                
+
+def initial_checks():
+    global client, cmd_url, config
+    CONFIG_FILE = check_config()
+    try:
+        with open(CONFIG_FILE) as f:
+            config = json.load(f)
+    except Exception as e:
+        raise CorruptedConfig("Config file seems corrupted, run syrics -c reset") from e
+    cmd_url = parse_cmd(config)
+    client = Spotify(config['sp_dc'])
+    if cmd_url == 'current':
+        cmd_url = client.get_current_song( )['item']['external_urls']['spotify']
+    elif cmd_url == 'play':
+        cmd_url = client.select_user_playlist()['external_urls']['spotify']
+    elif cmd_url == 'album':
+        cmd_url = client.select_user_album()['external_urls']['spotify']
+
 def main():
+    initial_checks()
     if config['download_path'] and not os.path.exists(config['download_path']):
         os.mkdir(config['download_path'])
     print(logo, end='\n\n')
