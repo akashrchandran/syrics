@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 
 parser = argparse.ArgumentParser()
 
@@ -104,11 +105,11 @@ def create_config(config_exists = True):
     with open(CONFIG_FILE, "w+") as f:
         f.write(json.dumps(config, indent=4))
     print("config sucessfully setup, run the program again.")
-    exit(1)
+    sys.exit(1)
 
 def open_config():
     if os.name == "nt":
         subprocess.call(["notepad", CONFIG_FILE])
     else:
         subprocess.call(["nano", CONFIG_FILE])
-    exit(1)
+    sys.exit(1)
