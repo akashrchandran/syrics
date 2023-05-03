@@ -140,12 +140,14 @@ def fetch_files(path: str):
 def initial_checks():
     global client, cmd_url, config
     CONFIG_FILE = check_config()
+    cmd_url, directory, force = parse_cmd()
     try:
         with open(CONFIG_FILE) as f:
             config = json.load(f)
     except Exception as e:
         raise CorruptedConfig("Config file seems corrupted, run syrics -c reset") from e
-    cmd_url = parse_cmd(config)
+    config['download_path'] = directory or config['download_path']
+    config['force_download'] = force or config['force_download']
     client = Spotify(config['sp_dc'])
     if cmd_url == 'current':
         cmd_url = client.get_current_song( )['item']['external_urls']['spotify']

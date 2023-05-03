@@ -41,12 +41,8 @@ parser.add_argument("URL",
                     )
 
 
-def parse_cmd(config):
+def parse_cmd():
     args = parser.parse_args()
-    if args.directory:
-        config['download_path'] = args.directory
-    if args.force:
-        config['force_download'] = args.force
     if args.user in ['current', 'current-playing']:
         args.URL = 'current'
     elif args.user in ['play', 'playlist']:
@@ -59,7 +55,7 @@ def parse_cmd(config):
         create_config(config_exists = False)
     elif args.config in ["open", "o"]:
         open_config()
-    return args.URL
+    return args.URL, args.directory, args.force
 
 def input_taker(config, key, question, string = True):
     print(question)
