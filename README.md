@@ -31,7 +31,7 @@ A command line tool to fetch lyrics from spotify and save it to lrc file. It can
  
 ## Getting started
 
-> You will need a **spotify account**, free also works
+> You will need a **spotify account**, free also works for some limited songs but it's nice to have premium.
 
 ### Install with pip
 
