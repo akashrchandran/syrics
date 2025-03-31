@@ -50,7 +50,6 @@ class Spotify:
 
     def get_lyrics(self, track_id: str):
         params = 'format=json&market=from_token'
-        print(self.session.headers['authorization'])
         req = self.session.get(f'https://spclient.wg.spotify.com/color-lyrics/v2/track/{track_id}', params=params)
         return req.json() if req.status_code == 200 else None
     
