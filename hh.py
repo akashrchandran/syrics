@@ -1,0 +1,5 @@
+from syrics.api import Spotify
+
+
+sp = Spotify("AQCFDbh4qjdCxAOHzNk-ehVbOUNIMSSs72JxZorIttETE-sycbrfRIYyH6zoNnpXzLIwmyi_kBwi6nIy7T6TavQLMXBySfnVo4v1wxkiPh9BxN1hB5RZ2quXtV2_j8Afla6WlK1Qxgu36qg6U_vF8Z-OX_IP9nyMFApvmgTpQzMIB0oHorA2399HiFvkvwJO9f3K46F6QeRoXbC4a8nrwCgk9i3Q")
+print(sp.get_lyrics("3o9uL1uNPcen0lItb1Hw3m"))

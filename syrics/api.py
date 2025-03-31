@@ -1,9 +1,11 @@
+import time
 import requests
 import spotipy
 
+from .totp import SpotifyTotp
+
 from .exceptions import NotValidSp_Dc, NoSongPlaying
 
-TOKEN_URL = 'https://open.spotify.com/get_access_token?reason=transport&productType=web_player'
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
 
 
@@ -18,12 +20,21 @@ class Spotify:
 
     def login(self):
         try:
+            server_time_seconds = int(time.time())
+            totp = SpotifyTotp().generate_totp()
+            TOKEN_URL = 'https://open.spotify.com/get_access_token?reason=init&productType=web_player'
+            TOKEN_URL += f"&totp={totp}&totpVer=5&ts={server_time_seconds}"
             req = self.session.get(TOKEN_URL, allow_redirects=False)
             token = req.json()
             self.token = token['accessToken']
+            # i don't know why it sometimes returns the wrong token
+            if(self.token[:2]!="BQ"):
+                self.login()
+                return
             self.session.headers['authorization'] = f"Bearer {self.token}"
         except Exception as e:
             raise NotValidSp_Dc("sp_dc provided is invalid, please check it again!") from e
+
 
     def get_me(self):
         try:
@@ -39,6 +50,7 @@ class Spotify:
 
     def get_lyrics(self, track_id: str):
         params = 'format=json&market=from_token'
+        print(self.session.headers['authorization'])
         req = self.session.get(f'https://spclient.wg.spotify.com/color-lyrics/v2/track/{track_id}', params=params)
         return req.json() if req.status_code == 200 else None
     
