@@ -1,24 +1,59 @@
 import requests
 import spotipy
 
-from .exceptions import NotValidSp_Dc, NoSongPlaying
+from syrics.totp import TOTP
 
-TOKEN_URL = 'https://open.spotify.com/get_access_token?reason=transport&productType=web_player'
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36"
+from .exceptions import NoSongPlaying, NotValidSp_Dc, TOTPGenerationException
+
+TOKEN_URL = 'https://open.spotify.com/get_access_token'
+SERVER_TIME_URL = 'https://open.spotify.com/server-time'
+SPOTIFY_HOME_PAGE_URL = "https://open.spotify.com/"
+CLIENT_VERSION = "1.2.46.25.g7f189073"
+
+HEADERS = {
+                "accept": "application/json",
+                "accept-language": "en-US",
+                "content-type": "application/json",
+                "origin": SPOTIFY_HOME_PAGE_URL,
+                "priority": "u=1, i",
+                "referer": SPOTIFY_HOME_PAGE_URL,
+                "sec-ch-ua": '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": '"Windows"',
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-site",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
+                "spotify-app-version": CLIENT_VERSION,
+                "app-platform": "WebPlayer",
+            }
 
 
 class Spotify:
     def __init__(self, dc_token: str) -> None:
         self.session = requests.Session()
         self.session.cookies.set('sp_dc', dc_token)
-        self.session.headers['User-Agent'] = USER_AGENT
-        self.session.headers['app-platform'] = 'WebPlayer'
+        self.session.headers.update(HEADERS)
+        self.totp = TOTP()
         self.login()
         self.sp = spotipy.Spotify(self.token)
 
     def login(self):
         try:
-            req = self.session.get(TOKEN_URL, allow_redirects=False)
+            server_time_response = self.session.get("https://open.spotify.com/server-time")
+            server_time = 1e3 * server_time_response.json()["serverTime"]
+            totp = self.totp.generate(timestamp=server_time)
+            params={
+                "reason": "init",
+                "productType": "web-player",
+                "totp": totp,
+                "totpVer": str(self.totp.version),
+                "ts": str(server_time),
+            }
+        except Exception as e:
+            raise TOTPGenerationException("Error generating TOTP, retry!") from e
+        try:
+            req = self.session.get(TOKEN_URL, params=params)
             token = req.json()
             self.token = token['accessToken']
             self.session.headers['authorization'] = f"Bearer {self.token}"
