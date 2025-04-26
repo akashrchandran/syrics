@@ -6,3 +6,6 @@ class CorruptedConfig(Exception):
 
 class NoSongPlaying(Exception):
     pass
+
+class TOTPGenerationException(Exception):
+    pass

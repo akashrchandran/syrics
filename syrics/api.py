@@ -3,7 +3,7 @@ import spotipy
 
 from syrics.totp import TOTP
 
-from .exceptions import NotValidSp_Dc, NoSongPlaying
+from .exceptions import NoSongPlaying, NotValidSp_Dc, TOTPGenerationException
 
 TOKEN_URL = 'https://open.spotify.com/get_access_token'
 SERVER_TIME_URL = 'https://open.spotify.com/server-time'
@@ -50,6 +50,9 @@ class Spotify:
                 "totpVer": str(self.totp.version),
                 "ts": str(server_time),
             }
+        except Exception as e:
+            raise TOTPGenerationException("Error generating TOTP, retry!") from e
+        try:
             req = self.session.get(TOKEN_URL, params=params)
             token = req.json()
             self.token = token['accessToken']
