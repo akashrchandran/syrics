@@ -148,7 +148,7 @@ def initial_checks():
         raise CorruptedConfig("Config file seems corrupted, run syrics -c reset") from e
     config['download_path'] = directory or config['download_path']
     config['force_download'] = force or config['force_download']
-    client = Spocleattify(config['sp_dc'])
+    client = Spotify(config['sp_dc'])
     if cmd_url == 'current':
         cmd_url = client.get_current_song( )['item']['external_urls']['spotify']
     elif cmd_url == 'play':
