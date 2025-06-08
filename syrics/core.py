@@ -40,7 +40,7 @@ def get_playlist_tracks(playlist_id: str):
     play_folder = rename_using_format(config['play_folder_name'], play_data)
     print(f"> Playlist: {play_data['name']}")
     print(f"> Owner: {play_data['owner']}")
-    print(f"> Songs: {play_data} Tracks", end='\n\n')
+    print(f"> Songs: {play_data['total_tracks']} Tracks", end='\n\n')
     return client.playlist_tracks(playlist_id, play_data['tracks']['total']), play_folder
 
 
