@@ -5,7 +5,7 @@ from syrics.totp import TOTP
 
 from .exceptions import NoSongPlaying, NotValidSp_Dc, TOTPGenerationException
 
-TOKEN_URL = 'https://open.spotify.com/get_access_token'
+TOKEN_URL = 'https://open.spotify.com/api/token'
 SERVER_TIME_URL = 'https://open.spotify.com/server-time'
 SPOTIFY_HOME_PAGE_URL = "https://open.spotify.com/"
 CLIENT_VERSION = "1.2.46.25.g7f189073"
@@ -40,7 +40,7 @@ class Spotify:
 
     def login(self):
         try:
-            server_time_response = self.session.get("https://open.spotify.com/server-time")
+            server_time_response = self.session.get("https://open.spotify.com/api/server-time")
             server_time = 1e3 * server_time_response.json()["serverTime"]
             totp = self.totp.generate(timestamp=server_time)
             params={
