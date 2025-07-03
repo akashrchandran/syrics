@@ -17,7 +17,7 @@ requirements = [
 
 setup(
     name=pkg_name,
-    version="0.1.2.0",
+    version="0.1.2.1",
     author="Akash R Chandran",
     author_email="chandranrakash@gmail.com",
     description="A command line tool to fetch lyrics from spotify and save it to lrc file. It can fetch both synced and unsynced lyrics from spotify. ",
