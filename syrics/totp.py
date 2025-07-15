@@ -5,8 +5,8 @@ import math
 # thanks to https://github.com/glomatico/votify/blob/main/votify/totp.py
 class TOTP:
     def __init__(self) -> None:
-        self.secret = b"10239356982684469120121471223494829410773366870"
-        self.version = 11
+        self.secret = b"55601029510267381196079975060119874370686866"
+        self.version = 14
         self.period = 30
         self.digits = 6
 
